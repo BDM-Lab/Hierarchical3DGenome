@@ -12,6 +12,7 @@ import java.util.List;
 import utility.Constants;
 import utility.RegionVO;
 
+
 /**
  * This class currently works for one chromosome only, need upgrade for whole genome later
  * 

@@ -110,8 +110,8 @@ public class HierarchicalModeling {
 		//
 		
 		//filter contacts from 2 far away domains
-		//ExtractWithinAndConsecutiveDomainContact.determine_proximal_domain_and_filter(input_data_file, input_domain_file, 
-		//						global_model_file, global_mapping_file, filtered_contact_data_file);
+		ExtractWithinAndConsecutiveDomainContact.determine_proximal_domain_and_filter(input_data_file, input_domain_file, 
+								global_model_file, global_mapping_file, filtered_contact_data_file);
 		
 		//ExtractWithinAndConsecutiveDomainContact.determine_proximal_domain_and_filter(input_observed_data_file, input_domain_file, 
 		//		global_model_file, global_mapping_file, filtered_observed_contact_data_file);
@@ -119,18 +119,19 @@ public class HierarchicalModeling {
 		
 		//now, I can delete the original input_data_file to have more space		
 		
-		/*
+		
 		ArrayList<Integer> lstPos = new ArrayList<Integer>();
 		List<Constraint> lstCons = helper.readContactList(filtered_contact_data_file, lstPos,0.0);
 		
 		
 		double convert_factor = 1.0, ratio = 1.0;
-		int trial = 10;
+		int trial = 20;
 		
 		ArrayList<Double> cf_lst = new ArrayList<Double>();
 		ArrayList<Double> rat_lst = new ArrayList<Double>();
 		
 		PrintWriter pw = new PrintWriter("cf_rat.txt");
+		
 		
 		for(int i = 0; i < trial; i++){
 			
@@ -182,6 +183,8 @@ public class HierarchicalModeling {
 		pw.println();
 		
 		convert_factor = cf_lst.get((cf_lst.size() - 1)/ 2);
+	
+		//convert_factor = 1.0;
 		
 		for(int i = 0; i < trial; i++){
 			
@@ -247,9 +250,7 @@ public class HierarchicalModeling {
 			CommonFunctions.delete_file(chunky_model_file_reduced);
 			CommonFunctions.delete_file(global_model_file_chunk_extract);
 			
-			System.out.println("\nRatio:" + ratio);
-			
-			
+			System.out.println("\nRatio:" + ratio);			
 							
 			rat_lst.add(ratio);
 		}
@@ -261,29 +262,30 @@ public class HierarchicalModeling {
 		}
 			
 		ratio = rat_lst.get((rat_lst.size() - 1)/2);
+		//ratio = rat_lst.get(0);
 		
 		pw.println();
 		pw.println("Convert factor:" + convert_factor);
 		pw.println("Ratio:" + ratio);
 
 		pw.close();
-		*/
+	
 		
-		double convert_factor = 1.7;
-		double ratio = 2.66;
+		//double convert_factor = 1.7;
+		//double ratio = 2.66;
 		
 		//build 3D models for domains
 		String[] params = new String[2];
 		params[0] = contact_domain_file_input_folder;
 		params[1] = contact_domain_file_output_folder;
 		
-		//CommonFunctions.delete_file(contact_domain_file_output_folder);
-		//CommonFunctions.make_folder(contact_domain_file_output_folder);
+		CommonFunctions.delete_file(contact_domain_file_output_folder);
+		CommonFunctions.make_folder(contact_domain_file_output_folder);
 		
-		//StructureGeneratorLorentz_HierarchicalModeling.run_for_folder(params, convert_factor);
+		StructureGeneratorLorentz_HierarchicalModeling.run_for_folder(params, convert_factor);
 		
 		//		
-		init_structure(filtered_contact_data_file, input_domain_file, global_model_file, global_mapping_file, contact_domain_file_output_folder, convert_factor, ratio, output_folder);
+		init_structure(input_data_file, input_domain_file, global_model_file, global_mapping_file, contact_domain_file_output_folder, convert_factor, ratio, output_folder);
 		
 		
 		
@@ -497,6 +499,18 @@ public class HierarchicalModeling {
 		//done with using contact for now
 		//lstCons = null;
 		
+		//check if any distance is zero, make it non-zero for optimization 
+		for(int i = 0; i < number_points; i++){
+			for(int j = i + 1; j < number_points; j++){
+				double d = helper.calEuclidianDist(str[i * 3], str[i * 3 + 1], str[i * 3 + 2], str[j * 3], str[j * 3 + 1], str[j * 3 + 2]);
+				if (Math.abs(d) < 0.0001){
+					str[j * 3] += Math.random() - 0.5;
+					str[j * 3 + 1] += Math.random() - 0.5;
+					str[j * 3 + 2] += Math.random() - 0.5;
+				}
+			}
+		}
+		//
 		
 		String init_file = output_folder + "/init.pdb";
 		
