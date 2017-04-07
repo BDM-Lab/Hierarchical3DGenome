@@ -29,7 +29,7 @@ public class FindAlpha {
 		HashMap<Integer, Double> factor_domain = new HashMap<Integer, Double>();
 		HashMap<Integer, Double> factor_nondomain = new HashMap<Integer, Double>();
 		
-		IdentifyDomains domain_identifer = new IdentifyDomains(input_domain_file, resolution);				
+		IdentifyDomains domain_identifer = new IdentifyDomains(input_domain_file, 1, resolution);				
 		List<RegionVO> regions = domain_identifer.get_all_regions();
 		//to indicate if a region is a domain or non-domain
 		HashMap<Integer, Boolean> region_domain = new HashMap<Integer, Boolean>();

@@ -24,10 +24,10 @@ public class ZoomInModelByDomain {
 	
 	}
 	
-	public static void zoom_model_by_domain(String input_domain_file, String model_file, String mapping_file, String output_file) throws Exception{
+	public static void zoom_model_by_domain(String input_domain_file, String model_file, String mapping_file, String output_file, int chrId) throws Exception{
 		Helper helper = Helper.getHelperInstance();
 		
-		IdentifyDomains domain_identifer = new IdentifyDomains(input_domain_file, Constants.RESOLUTION);		
+		IdentifyDomains domain_identifer = new IdentifyDomains(input_domain_file, chrId, Constants.RESOLUTION);		
 		List<RegionVO> regions = domain_identifer.get_all_regions();
 		
 		PrintWriter pw = new PrintWriter("domain.txt");
@@ -106,10 +106,10 @@ public class ZoomInModelByDomain {
 		helper.writeStructure(output_file, helper.makeMatrixForPDBOutput(new_str), null, "", true);	
 	}
 	
-	public static void extract_model(String model_file, String mapping_file, String domain_file, int[] range, String output_file) throws Exception{
+	public static void extract_model(String model_file, String mapping_file, String domain_file, int[] range, String output_file, int chrId) throws Exception{
 		Helper helper = Helper.getHelperInstance();
 		
-		IdentifyDomains domain_identifer = new IdentifyDomains(domain_file, Constants.RESOLUTION);		
+		IdentifyDomains domain_identifer = new IdentifyDomains(domain_file, chrId, Constants.RESOLUTION);		
 		List<RegionVO> regions = domain_identifer.get_all_regions();
 		
 		HashMap<Integer, Integer> map_id_cor= helper.loadCoordinateMapping(mapping_file);

@@ -1,5 +1,6 @@
 package topological_domain;
 
+import static utility.CommonFunctions.lookup_region;
 import static utility.CommonFunctions.overlap;
 
 import java.io.BufferedReader;
@@ -11,6 +12,7 @@ import java.util.List;
 
 import utility.Constants;
 import utility.RegionVO;
+import valueObject.Constraint;
 
 
 /**
@@ -25,10 +27,12 @@ public class IdentifyDomains {
 	String input_file;
 	int resolution = Constants.RESOLUTION;
 	int largest_sequence_id;
-		
+	int chrom;
+	private List<RegionVO> domains = null;
+	
 	public static void main(String[] args)throws Exception{
 		String input_file = "E:/GM12878/loop_arrow_domain/GSE63525_GM12878_primary+replicate_Arrowhead_domainlist_whole.txt";
-		IdentifyDomains domain_identifer = new IdentifyDomains(input_file, 1000);
+		IdentifyDomains domain_identifer = new IdentifyDomains(input_file, 1, 1000);
 		
 		List<RegionVO> lst = domain_identifer.get_all_regions();	
 		for(RegionVO reg : lst){
@@ -37,15 +41,28 @@ public class IdentifyDomains {
 	}
 	
 	
+	
 	/**
 	 * 
 	 * @param input_file: contact file
 	 * @param res: resolution
+	 * @throws Exception 
 	 */
-	public IdentifyDomains(String input_file, int res){
+	public IdentifyDomains(String input_file, int chr, int res) throws Exception{
 		this.input_file = input_file;
 		this.resolution = res;
+		this.chrom = chr;
+		domains = get_all_regions();
 			
+	}
+	
+	
+	public List<RegionVO> getDomains() {
+		return domains;
+	}
+
+	public void setDomains(List<RegionVO> domains) {
+		this.domains = domains;
 	}
 	
 	//calculate coverage of all regions
@@ -102,7 +119,6 @@ public class IdentifyDomains {
 		//long size3 = get_size(regions);		
 		//System.out.println("Coverage of the whole chromosome: " + size3);
 		
-		for(int i = 0; i < regions.size(); i++) regions.get(i).setId(i);
 		
 //		//debug
 //		HashMap<Integer, String> regSet = new HashMap<Integer, String>();
@@ -116,6 +132,8 @@ public class IdentifyDomains {
 //		//
 		
 		Collections.sort(regions);
+		
+		for(int i = 0; i < regions.size(); i++) regions.get(i).setId(i);
 		
 		return regions;
 	}
@@ -140,7 +158,7 @@ public class IdentifyDomains {
 			if (st[0].equals("chrX")) chr_id = 23;
 			else chr_id = Integer.parseInt(st[0].replace("chr", ""));
 			
-			if (chr_id != 1) continue; // testing with chromosome 1
+			if (chr_id != chrom) continue; // testing with chromosome 1
 			
 			x = Integer.parseInt(st[1]);
 			y = Integer.parseInt(st[2]);
@@ -257,5 +275,49 @@ public class IdentifyDomains {
 		return new_list;
 	}
 	
+	/**
+	 * Assign domain for constraints
+	 * @param lstCon
+	 */
+	public void assignDomainID(List<Constraint> lstCons, List<RegionVO> domains){
+		RegionVO tmp = new RegionVO(1,0,0), domain1, domain2;
+		int id1, id2, x, y;		
+		
+		int chr = domains.get(0).getChr_id();
+		for(Constraint con : lstCons){
+			
+			x = con.getPos1();
+			y = con.getPos2();
+						
+			tmp.setChr_id(chr);
+			
+			
+				//look for domain that contains first index
+			tmp.setStart(x);
+			tmp.setEnd(x);			
+			domain1= lookup_region(domains, tmp);
+			id1 = domain1.getId();
+			con.setDomainID1(id1);	
+			
+			tmp.setStart(y);
+			tmp.setEnd(y);
+			domain2 = lookup_region(domains, tmp);
+			id2 = domain2.getId();
+			con.setDomainID2(id2);
+			
+		}
+	}
+	
+	//extract contact between domain1 and domain2
+	public List<Constraint> extractContactBetweenDomain(List<Constraint> lstCons, int id1, int id2){
+		ArrayList<Constraint> rs = new ArrayList<Constraint>();
+		for(Constraint con:lstCons){
+			if ((con.getDomainID1() == id1 && con.getDomainID2() == id2)
+				|| (con.getDomainID1() == id2 && con.getDomainID2() == id1)) {
+				rs.add(con);
+			}
+		}
+		return rs;
+	}
 	
 }

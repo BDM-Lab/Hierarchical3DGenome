@@ -16,8 +16,8 @@ import topological_domain.IdentifyDomains;
 
 public class ExtractWithinAndConsecutiveDomainContact {
 	
-	private static int chr_id = 1;
-	private static int resolution = 1000;
+	//private static int chr_id = 1;
+	//private static int resolution = 1000;
 	
 	public static void main(String[] args) throws Exception {
 		
@@ -31,11 +31,12 @@ public class ExtractWithinAndConsecutiveDomainContact {
 		
 		//extract_within_and_consecutive_contact(input_data_file, input_domain_file, output_file);
 		
-		determine_proximal_domain_and_filter(input_observed_data_file, input_domain_file, model_file, model_id_mapping_file, output_file);
+		determine_proximal_domain_and_filter(input_observed_data_file, input_domain_file, model_file, model_id_mapping_file, output_file, 1);
 				
 	}
 	
-	public static void determine_proximal_domain_and_filter(String input_data_file, String input_domain_file, String model_file, String model_id_mapping_file, String output_file) throws Exception{
+	public static void determine_proximal_domain_and_filter(String input_data_file, String input_domain_file, String model_file, 
+			String model_id_mapping_file, String output_file, int chrId) throws Exception{
 		Helper helper = Helper.getHelperInstance();
 		double[][] str = helper.loadPDBStructure(model_file);
 		
@@ -58,28 +59,37 @@ public class ExtractWithinAndConsecutiveDomainContact {
 		
 		boolean[][] is_proximal_domain = new boolean[max_pos + 1][max_pos + 1];
 		for(int i = 0; i < max_pos + 1; i++){
-			Arrays.fill(is_proximal_domain[i], true);
+			Arrays.fill(is_proximal_domain[i], false);
 		}
 		
 		Collections.sort(lst);
 		double median = lst.get(lst.size()/2);
 		
+		for(int i = 0; i < n - 1; i++){
+			is_proximal_domain[i][i] = true;
+			is_proximal_domain[i][i + 1] = true;
+			is_proximal_domain[i + 1][i] = true;
+		}
+		is_proximal_domain[n - 1][n - 1] = true;
+		
+		/*
 		for(int i = 0; i < n; i++){
-			for(int j = i + 10; j < n; j++){//if |i - j| < 5, contacts between them are included
-				d = Math.sqrt(helper.calEuclidianDist(str[i][0], str[i][1], str[i][2], str[j][0], str[j][1], str[j][2]));
-				if (d > median){ // if two domains are too far away from each other
+			for(int j = i + 2; j < n; j++){//if |i - j| < 5, contacts between them are included
+				//d = Math.sqrt(helper.calEuclidianDist(str[i][0], str[i][1], str[i][2], str[j][0], str[j][1], str[j][2]));
+				//if (d > median){ // if two domains are too far away from each other
 					is_proximal_domain[map_id_pos.get(i)][map_id_pos.get(j)] = false;
 					is_proximal_domain[map_id_pos.get(j)][map_id_pos.get(i)] = false;
-				}
+				//}
 			}
 		}
+		*/
 		
-		extract_within_and_consecutive_contact(input_data_file, input_domain_file, output_file, is_proximal_domain);
+		extract_within_and_consecutive_contact(input_data_file, input_domain_file, output_file, chrId, is_proximal_domain);
 	}
 	
-	public static void extract_within_and_consecutive_contact(String input_data_file, String input_domain_file, String output_file, boolean[][] ... is_proximal_domain) throws Exception{
+	public static void extract_within_and_consecutive_contact(String input_data_file, String input_domain_file, String output_file, int chrId, boolean[][] ... is_proximal_domain) throws Exception{
 		
-		IdentifyDomains domain_identifer = new IdentifyDomains(input_domain_file, resolution);
+		IdentifyDomains domain_identifer = new IdentifyDomains(input_domain_file, chrId, Constants.RESOLUTION);
 		
 		List<RegionVO> regions = domain_identifer.get_all_regions();
 		Collections.sort(regions);
@@ -99,7 +109,7 @@ public class ExtractWithinAndConsecutiveDomainContact {
 			y = Integer.parseInt(st[1]);
 			//f = Double.parseDouble(st[2]);
 			
-			tmp.setChr_id(chr_id);
+			tmp.setChr_id(chrId);
 			
 			//look for domain that contains first index
 			tmp.setStart(x);
