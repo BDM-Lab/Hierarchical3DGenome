@@ -12,7 +12,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import full_modeling.HierarchicalModeling;
 import topological_domain.IdentifyDomains;
+import valueObject.RegionVO;
 
 public class ExtractWithinAndConsecutiveDomainContact {
 	
@@ -89,7 +91,7 @@ public class ExtractWithinAndConsecutiveDomainContact {
 	
 	public static void extract_within_and_consecutive_contact(String input_data_file, String input_domain_file, String output_file, int chrId, boolean[][] ... is_proximal_domain) throws Exception{
 		
-		IdentifyDomains domain_identifer = new IdentifyDomains(input_domain_file, chrId, Constants.RESOLUTION);
+		IdentifyDomains domain_identifer = new IdentifyDomains(input_domain_file, chrId, HierarchicalModeling.resolution);
 		
 		List<RegionVO> regions = domain_identifer.get_all_regions();
 		Collections.sort(regions);
@@ -104,6 +106,7 @@ public class ExtractWithinAndConsecutiveDomainContact {
 		
 		PrintWriter pw = new PrintWriter(output_file);
 		while((ln = br.readLine()) != null) {
+			if (!Character.isDigit(ln.charAt(0))) continue;
 			st = ln.split("\\s+");
 			x = Integer.parseInt(st[0]);
 			y = Integer.parseInt(st[1]);

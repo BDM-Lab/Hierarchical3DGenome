@@ -18,12 +18,13 @@ import noisy_mds.StructureGeneratorLorentz_HierarchicalModeling;
 import topological_domain.IdentifyDomains;
 import utility.CommonFunctions;
 import utility.DistanceEstimate;
+import utility.ExtractLocalModel;
 import utility.ExtractWithinAndConsecutiveDomainContact;
 import utility.Helper;
-import utility.RegionVO;
 import valueObject.Constants;
 import valueObject.Constraint;
 import valueObject.InputParameters;
+import valueObject.RegionVO;
 
 public class HierarchicalModeling {
 	
@@ -32,8 +33,8 @@ public class HierarchicalModeling {
 	//private static String input_data_domain_file = input_folder + "/chr1_1kb_gm12878_list_domain.txt";
 	
 	private static Helper helper = Helper.getHelperInstance();
-	private static int resolution = 1000;	
-	private static int chr_id = 2;
+	public static int resolution = 5000;	
+	public static int chr_id = 1;
 	
 	public static void main(String[] args) throws Exception{
 		
@@ -45,14 +46,30 @@ public class HierarchicalModeling {
 			output_folder = "output/test/";
 		}else{
 			chr_id = Integer.parseInt(args[0]);
-			input_data_file = args[1];
-			input_observed_data_file = args[2];
-			input_domain_file = args[3];
-			output_folder = args[4];
+			resolution = Integer.parseInt(args[1]);
+			input_data_file = args[2];
+			input_observed_data_file = args[3];
+			input_domain_file = args[4];
+			output_folder = args[5];
 		}		
 		
+		
+		int num_trial_find_alpha = 15;
+		int num_domain_model = 10;
+		int num_low_res_model = 10;
+		int num_global_model = 10;
+		
+		
+
 		File file = new File(output_folder);
 		if (!file.exists()) file.mkdirs();
+		
+		
+		/*/make new domain file, where each domain is a bin of 500kb
+		String domainFile = output_folder + "/" + "chr" + chr_id + "Domain.txt";
+		makeDomainFile(input_data_file, domainFile, chr_id, 500000);
+		input_domain_file = domainFile;
+		/*/
 		
 		
 		String output_folder_low_res_global = output_folder + "/low_res_global/";
@@ -84,26 +101,27 @@ public class HierarchicalModeling {
 				
 		CommonFunctions.delete_file(contact_domain_file_input_folder);
 		CommonFunctions.make_folder(contact_domain_file_input_folder);
-		extract_domain_contact(input_data_file, input_domain_file, contact_domain_file_input_folder);
+		
+		extract_domain_contact(input_data_file, input_domain_file, contact_domain_file_input_folder, chr_id);
 		
 		
 		//generate global model at low resolution (each point is a domain)
-		InputParameters input_parameter = new InputParameters();			
-		input_parameter.setNum(1);				
-		input_parameter.setOutput_folder(output_folder_low_res_global);		
-		input_parameter.setInput_file(domain_contact_file);		
-		input_parameter.setFile_prefix(file_name);
+		InputParameters global_input_parameter = new InputParameters();			
+		global_input_parameter.setNum(num_low_res_model);				
+		global_input_parameter.setOutput_folder(output_folder_low_res_global);		
+		global_input_parameter.setInput_file(domain_contact_file);		
+		global_input_parameter.setFile_prefix(file_name);
 		
-		input_parameter.setVerbose(false);
-		input_parameter.setLearning_rate(1.0);
-		input_parameter.setMax_iteration(20000);		
-		input_parameter.setKeepOriginalScale(true);
+		global_input_parameter.setVerbose(false);
+		global_input_parameter.setLearning_rate(1.0);
+		global_input_parameter.setMax_iteration(10000);		
+		global_input_parameter.setKeepOriginalScale(true);
 		
-		input_parameter.setNumber_threads(10); 
+		global_input_parameter.setNumber_threads(1); 
 		
 		//input_parameter.setConvert_factor(0.6);//for chr.1		
 		CommonFunctions.delete_file(output_folder_low_res_global);
-		StructureGeneratorLorentz_HierarchicalModeling.run_for_one_input(input_parameter);
+		StructureGeneratorLorentz_HierarchicalModeling.run_for_one_input(global_input_parameter);
 		//
 		
 		//get model and mapping files
@@ -124,14 +142,13 @@ public class HierarchicalModeling {
 		double convert_factor = 1.0, ratio = 1.0;
 		
 		
-		//PrintWriter pw = new PrintWriter(output_folder + "/convertFactorSearch.txt");
-		
-		/*
-		int trial = 20;			
-		ArrayList<Double> cf_lst = new ArrayList<Double>();		
-		for(int i = 0; i < trial; i++){
+		//searching for conversion factor
+		PrintWriter pw = new PrintWriter(output_folder + "/convertFactorSearch.txt");			
 			
-			int[] range = determine_chunk_size(input_domain_file,2);
+		ArrayList<Double> cf_lst = new ArrayList<Double>();		
+		for(int i = 0; i < num_trial_find_alpha; i++){
+			
+			int[] range = determine_chunk_size(input_domain_file,1);
 			
 			System.out.println("Chunk range:" + range[0] + "\t" + range[1]);
 			//pw.println("Chunk range:" + range[0] + "\t" + range[1]);
@@ -145,7 +162,7 @@ public class HierarchicalModeling {
 			
 			//now, build 3D model with this chunk of data and look for best convert_factor alpha
 			String chunk_data_output_folder = output_folder + "/chunk_data/";
-			input_parameter = new InputParameters();
+			InputParameters input_parameter = new InputParameters();
 			input_parameter.setNum(1);				
 			input_parameter.setOutput_folder(chunk_data_output_folder);		
 			input_parameter.setInput_file(contact_data_chunk);		
@@ -153,7 +170,7 @@ public class HierarchicalModeling {
 			
 			input_parameter.setVerbose(false);
 			input_parameter.setLearning_rate(0.1);
-			input_parameter.setMax_iteration(20000);		
+			input_parameter.setMax_iteration(5000);		
 			input_parameter.setKeepOriginalScale(true);
 			input_parameter.setAddInequalityConstraint(false);
 	
@@ -167,29 +184,31 @@ public class HierarchicalModeling {
 			cf_lst.add(convert_factor);
 			
 			pw.println("convert_factor:" + convert_factor + "\tcor:" + cor);
+			pw.flush();
 			System.out.println("convert_factor:" + convert_factor + "\tcor:" + cor);
 		}
+		
+		System.out.println("Done searching for convert factor...");
 		
 		Collections.sort(cf_lst);
 		pw.println();
 		for(int i = 0; i < cf_lst.size(); i++){
 			pw.printf("%.2f, ", cf_lst.get(i));
-		}
+		}		
+		pw.println();
+				
+		convert_factor = cf_lst.get((cf_lst.size() - 1)/ 2);		
+		
 		
 		pw.println();
-		
-		convert_factor = cf_lst.get((cf_lst.size() - 1)/ 2);
-		
-		convert_factor = 1.2;
-		
-		pw.println();
-		pw.println("Convert factor:" + convert_factor);
+		pw.println("Best convert factor:" + convert_factor);
 		System.out.println("Convert factor:" + convert_factor);
 		pw.flush();
+		pw.close();
+	
 		
-		*/
 		
-		convert_factor = 1.2;
+		//convert_factor = 0.9;
 		
 		//build 3D models for domains
 		String[] params = new String[2];
@@ -198,47 +217,125 @@ public class HierarchicalModeling {
 		
 		CommonFunctions.delete_file(contact_domain_file_output_folder);
 		CommonFunctions.make_folder(contact_domain_file_output_folder);		
-		StructureGeneratorLorentz_HierarchicalModeling.run_for_folder(params, convert_factor);
+		StructureGeneratorLorentz_HierarchicalModeling.run_for_folder(params, convert_factor,num_domain_model);
 		
-		
-		
+				
 		//calculate the ratio
+		System.out.println("Reading input data to calculate ratio...");
 		ArrayList<Integer> lstPos = new ArrayList<Integer>();
 		List<Constraint> lstCons = helper.readContactList(filtered_contact_data_file, lstPos,0.0);
+		
+		System.out.println("Done...");
 		
 		IdentifyDomains identifyDomain = new IdentifyDomains(input_domain_file, chr_id, resolution);
 		identifyDomain.assignDomainID(lstCons, identifyDomain.getDomains());
 		
-		List<Constraint> lstConsDomain = identifyDomain.extractContactBetweenDomain(lstCons, 10,11);
-		
-		DistanceEstimate.distanceBewteen2Domains(lstConsDomain, convert_factor, 10, 11, contact_domain_file_output_folder);
+		//List<Constraint> lstConsDomain = identifyDomain.extractContactBetweenDomain(lstCons, 10,11);		
+		//DistanceEstimate.distanceBewteen2Domains(lstConsDomain, convert_factor, 10, 11, contact_domain_file_output_folder);
 		
 		//pw.println();
+		System.out.println("Estimate ratio...");
 		ratio = DistanceEstimate.distanceEstimateBetweenDomains(lstCons, convert_factor, global_model_file, 
 				input_domain_file, contact_domain_file_output_folder, chr_id, resolution);
 		
+		
+		//searching in a range of [ratio - 0.5, ratio + 0.5], step size = 0.1 for the best ratio		
+		double tmpRatio = Math.max(ratio - 0.5,  0.1);
+		double cor, bestCor = buildHighResModel(input_data_file, filtered_contact_data_file, input_domain_file, global_model_file, 
+				global_mapping_file, contact_domain_file_output_folder, convert_factor, tmpRatio, output_folder);
+		
+		tmpRatio += 0.1;
+		
+		PrintWriter pwRatio = new PrintWriter(output_folder + "/ratio.txt");
+		while(tmpRatio <= ratio + 0.5){
+			cor = buildHighResModel(input_data_file, filtered_contact_data_file, input_domain_file, global_model_file, 
+					global_mapping_file, contact_domain_file_output_folder, convert_factor, tmpRatio, output_folder);
+			
+			if (cor > bestCor){
+				bestCor = cor;
+				ratio = tmpRatio;
+			}
+			pwRatio.printf("Ratio:%f, cor: %f\n", tmpRatio, cor);
+			pwRatio.flush();
+			tmpRatio += 0.1;
+		}
+		
+		
+		pwRatio.printf("Best ratio: %.3f, correlation: %.3f\n", ratio, bestCor);
+		pwRatio.close();
+		///////////////////////
+		
+		
+		
+		System.out.println("Done...");
 		//pw.println("Ratio:" + ratio);	
 		//pw.close();
 		
 		//ratio = 2.569;
 		
+		System.out.println("Generating models ...");
+		for(int i = 0; i < num_global_model; i++){			
+			//CommonFunctions.delete_file(output_folder_low_res_global);
+			//StructureGeneratorLorentz_HierarchicalModeling.run_for_one_input(global_input_parameter);
+			
+			buildHighResModel(input_data_file, filtered_contact_data_file, input_domain_file, global_model_file, global_mapping_file, contact_domain_file_output_folder, convert_factor, ratio, output_folder);
+		}
 		
-		//	
-		
-		init_structure(filtered_contact_data_file, input_domain_file, global_model_file, global_mapping_file, contact_domain_file_output_folder, convert_factor, ratio, output_folder);
-		
-		CommonFunctions.delete_file(filtered_contact_data_file);
-		CommonFunctions.delete_file(input_data_file);
+		//CommonFunctions.delete_file(filtered_contact_data_file);
+		//CommonFunctions.delete_file(input_data_file);
 		CommonFunctions.delete_file(unnorm_domain_contact_file);
+		CommonFunctions.delete_file(contact_domain_file_input_folder);
+		
+		
+		////////////////////////////////
+		IdentifyDomains identifyDomains = new IdentifyDomains(input_domain_file, chr_id, resolution);
+		
+		List<RegionVO> regions = identifyDomains.getDomains();
+		regions = identifyDomains.merge2AdjacentDomains(regions);
+		String domainInputFolder = output_folder + "/large_domains_input";
+		String domainOutputFolder = output_folder + "/large_domains_output";
+		
+		HierarchicalModeling.extract_domain_contact(input_data_file, regions, domainInputFolder , chr_id, 0);
+		
+		//build 3D models for domains		
+		params[0] = domainInputFolder;
+		params[1] = domainOutputFolder;
+		
+		CommonFunctions.delete_file(domainOutputFolder);
+		CommonFunctions.make_folder(domainOutputFolder);		
+		StructureGeneratorLorentz_HierarchicalModeling.run_for_folder(params, convert_factor,1);
+		
+		CommonFunctions.delete_file(domainInputFolder);
+
+		
+		//extract model		
+		
+		File fo = new File(output_folder);
+		for(File f : fo.listFiles()){
+			if (f.getName().startsWith("chr" + chr_id) && f.getName().endsWith(".pdb")){
+				String globalModel = f.getAbsolutePath();
+				String globalMapping = output_folder + "/chr" + chr_id + "_coordinate_mapping.txt";
+				String outputFolderLargeModel = output_folder + "/localModels";
+				CommonFunctions.delete_file(outputFolderLargeModel);
+				CommonFunctions.make_folder(outputFolderLargeModel);
+				
+				ExtractLocalModel.extractLocalModel(globalModel, globalMapping, input_domain_file, outputFolderLargeModel, chr_id,resolution);
+				break;
+			}
+		}
+
+		
+		
+		
 		
 	}
 	
 	
 	
-	
-	public static void init_structure(String input_file, String input_domain_file, String global_model_file, String global_coordinate_mapping_file, 
+	public static double buildHighResModel(String input_file, String filtered_input_file, String input_domain_file, String global_model_file, String global_coordinate_mapping_file, 
 			String loci_model_folder, double convert_factor, double global_model_scale, String output_folder) throws Exception{
 		
+		PrintWriter log = new PrintWriter(output_folder + "/log.txt");
 		
 		IdentifyDomains domain_identifer = new IdentifyDomains(input_domain_file, chr_id, resolution);		
 		List<RegionVO> regions = domain_identifer.getDomains();		
@@ -246,12 +343,19 @@ public class HierarchicalModeling {
 		Helper helper = Helper.getHelperInstance();
 		
 		ArrayList<Integer> lstPos = new ArrayList<Integer>();
-		List<Constraint> lstCons = helper.readContactList(input_file, lstPos,0.0);
+		List<Constraint> lstCons = helper.readContactList(filtered_input_file, lstPos,0.0);
 		HashMap<Integer, Integer> map_id_cor = new HashMap<Integer, Integer>();
+		
+		
+		//PrintWriter initMappingPW = new PrintWriter(output_folder + "/initMapping.txt");		
 		for(int i = 0; i < lstPos.size(); i++){
 			map_id_cor.put(i, lstPos.get(i)); // mapping id to coordinate
+			
+			//initMappingPW.println(lstPos.get(i) + "\t" + i);
 		}
 		lstPos = null; // marked memory is unused
+		//initMappingPW.close();
+				
 		
 		double scale_factor_for_local_model = 1.0;// is the average of converted distances
 		int number_points = map_id_cor.size();//compute_string_length(input_file);//219899 - full file
@@ -259,6 +363,16 @@ public class HierarchicalModeling {
 		
 		//calculate scale_factor = 0.8359535263264956  for chr.1	, 1.0377017447829227 for first 20000
 		scale_factor_for_local_model = compute_scale_factor(lstCons, convert_factor);
+		
+		System.out.println("Scale for global model:" + global_model_scale);
+		
+		//log.println("Scale for global model (before):" + global_model_scale);
+		
+		global_model_scale /= scale_factor_for_local_model; //because local models are gonna scale by this factor 
+		
+		System.out.println("Scale for global model:" + global_model_scale);
+		
+		log.println("Scale for global model:" + global_model_scale);
 		
 		System.out.println("scale_factor_for_local_model:" + scale_factor_for_local_model);
 		
@@ -294,6 +408,7 @@ public class HierarchicalModeling {
 		double loci_model[][], prevX=0, prevY=0, prevZ=0;
 		String mapping_file;
 		HashMap<Integer,Integer> map_id_cor_tmp; //contains mapping of indices to coordinates
+		
 		for(int t = 0; t < regions.size(); t++){
 			folder_name = loci_model_folder + "/region_" + regions.get(t).getId();
 			File folder = new File(folder_name);
@@ -311,18 +426,16 @@ public class HierarchicalModeling {
 				}
 			}
 			if (fileNames.size() == 0){
-				System.out.println("No model in: " + folder_name);
+				System.err.println("No model in: " + folder_name);
 				continue;
 			}
 			
 			String modelFile = fileNames.get( (int) (Math.random() * fileNames.size()));
-				
-				
 					
 					loci_model = helper.loadPDBStructure(modelFile);					
 					
 					map_id_cor_tmp = helper.loadCoordinateMapping(mapping_file);
-					
+					//System.out.println(mapping_file);
 					//System.out.println(f.getName() + "\t" + map_id_cor_tmp.get(0) + "\t" + map_id_cor_tmp.get(Collections.max(map_id_cor_tmp.keySet())));
 					
 					//scale local models to the new scale of the whole model
@@ -339,7 +452,8 @@ public class HierarchicalModeling {
 					cy /= loci_model.length;
 					cz /= loci_model.length;
 					
-					int global_id = map_domain_id_cor.get(regions.get(t).getId());
+					//int global_id = map_domain_id_cor.get(regions.get(t).getId());
+					int global_id = t;
 					
 					double tx = global_model[global_id][0] - cx;
 					double ty = global_model[global_id][1] - cy;
@@ -348,6 +462,7 @@ public class HierarchicalModeling {
 					for(int i = 0; i < loci_model.length; i++){
 						
 						//if (current >= number_points) break;
+						
 						if (map_id_cor.get(current).intValue() == map_id_cor_tmp.get(i).intValue()){
 							str[current * 3 + 0] = loci_model[i][0] + tx;
 							str[current * 3 + 1] = loci_model[i][1] + ty;
@@ -360,6 +475,9 @@ public class HierarchicalModeling {
 						}else if(map_id_cor.get(current) < map_id_cor_tmp.get(i)){ // local model skip a point, increase global model index by 1
 							
 							while (map_id_cor.get(current) < map_id_cor_tmp.get(i)) {
+								
+								log.println("Skip:" + current + "\t" + map_id_cor.get(current));
+								
 								str[current * 3 + 0] = prevX + (Math.random() - 0.5);
 								str[current * 3 + 1] = prevY + (Math.random() - 0.5);
 								str[current * 3 + 2] = prevZ + (Math.random() - 0.5);
@@ -400,6 +518,8 @@ public class HierarchicalModeling {
 			
 		}
 		
+		log.close();
+		
 		System.out.println("Total of skipped points in local models:" + local_skip);
 		
 		if (current < number_points){
@@ -432,8 +552,7 @@ public class HierarchicalModeling {
 			}
 		}
 		//
-		
-		
+				
 		
 		String init_file = output_folder + "/" + chr_id + "_init.pdb";
 		
@@ -443,16 +562,16 @@ public class HierarchicalModeling {
 		String tmpFolder = output_folder + "/tmp_model/";
 		File file = new File(tmpFolder);
 		file.mkdirs();
-		
-		
+			
 		
 		InputParameters input_parameter = new InputParameters();
 		
-		input_parameter.setNum(10);	
+		input_parameter.setNum(1);	
 		
 		input_parameter.setOutput_folder(output_folder);
 		
-		input_parameter.setInput_file(input_file);
+		input_parameter.setInput_file(filtered_input_file);
+		//input_parameter.setFiltered_input_file(filtered_input_file);
 		
 		//input_parameter.setContact_thres(1.0);
 		
@@ -460,7 +579,7 @@ public class HierarchicalModeling {
 		input_parameter.setConvert_factor(convert_factor);
 		input_parameter.setVerbose(true);
 		input_parameter.setLearning_rate(0.1);
-		input_parameter.setMax_iteration(50000);
+		input_parameter.setMax_iteration(10000);
 		
 		input_parameter.setInitial_str_file(init_file);
 		
@@ -471,8 +590,42 @@ public class HierarchicalModeling {
 		//input_parameter.setTmpFolder(tmpFolder); //set to write out models during optimization
 		
 		StructureGeneratorLorentz_HierarchicalModeling generator = new StructureGeneratorLorentz_HierarchicalModeling(input_parameter);		
-		generator.generateStructure();
+		return generator.generateStructure();
 		
+		
+	}
+	
+	/**
+	 * Make a domain file where each domain is a bin of size 500kb
+	 * @param inputFile
+	 */
+	public static void makeDomainFile(String inputFile, String domainFile, int chr, int size) throws Exception{
+		//determine the maximum length
+		BufferedReader br = new BufferedReader(new FileReader(new File(inputFile)));
+		int maxLength = 0;
+		String ln, st[];
+		int x, y;
+		while((ln = br.readLine()) != null){
+			if (!Character.isDigit(ln.charAt(0))) continue;
+			
+			st = ln.split("\\s+");
+			x = Integer.parseInt(st[0]);
+			y = Integer.parseInt(st[1]);
+			if (x > maxLength) maxLength = x;
+			if (y > maxLength) maxLength = y;
+		}
+		br.close();
+		
+		PrintWriter domainPw = new PrintWriter(domainFile);
+		int i = size;
+		while(i < maxLength){
+			domainPw.println("chr" + chr + "\t" + (i - size) + "\t" + (i-1));
+			i += size;
+		}
+		
+		domainPw.println("chr" + chr + "\t" + (i - size) + "\t" + maxLength);
+		
+		domainPw.close();
 		
 	}
 	
@@ -486,17 +639,16 @@ public class HierarchicalModeling {
 		List<RegionVO> regions = domain_identifer.get_all_regions();
 		int[] range = new int[2];
 		
-		int g = 0;
+		int g = 1;
 		if (gap.length > 0) g = gap[0];
-		else g = 5;
-		
+				
 		while(true){
-			int id = (int) (Math.random() * (regions.size() - 5));
+			int id = (int) (Math.random() * (regions.size() - g));
 			//chunk span 2 adjacent regions
 			range[0] = (regions.get(id).getStart() + regions.get(id).getEnd())/2;			
-			range[1] = (regions.get(id + 1).getStart() + regions.get(id + 1).getEnd())/2;
+			range[1] = (regions.get(id + g).getStart() + regions.get(id + g).getEnd())/2;
 			
-			if ((range[1] - range[0])/resolution < 1000) break;
+			if ((range[1] - range[0])/resolution < 500) break;
 		
 		}
 		
@@ -519,6 +671,8 @@ public class HierarchicalModeling {
 		String ln;
 		String[] st;		
 		while((ln = br.readLine()) != null){
+			if (!Character.isDigit(ln.charAt(0))) continue;
+			
 			st = ln.split("\\s+");
 			freq = Double.parseDouble(st[2]);
 			
@@ -563,6 +717,7 @@ public class HierarchicalModeling {
 		String[] st;	
 		int x, y;
 		while((ln = br.readLine()) != null){
+			if (!Character.isDigit(ln.charAt(0))) continue;
 			st = ln.split("\\s+");
 			x = Integer.parseInt(st[0])/resolution;
 			y = Integer.parseInt(st[1])/resolution;
@@ -605,6 +760,8 @@ public class HierarchicalModeling {
 		double f;
 
 		while((ln = br.readLine()) != null) {
+			if (!Character.isDigit(ln.charAt(0))) continue;
+			
 			st = ln.split("\\s+");
 			x = Integer.parseInt(st[0]);
 			y = Integer.parseInt(st[1]);
@@ -654,13 +811,27 @@ public class HierarchicalModeling {
 	 * @return
 	 * @throws Exception
 	 */
-	public static void extract_domain_contact(String input_data_file, String input_domain_file, String output_folder) throws Exception{
+	public static void extract_domain_contact(String input_data_file, String input_domain_file, String output_folder, int chr) throws Exception{
 		
 		IdentifyDomains domain_identifer = new IdentifyDomains(input_domain_file, chr_id, resolution);
 		
 		List<RegionVO> regions = domain_identifer.get_all_regions();
 		Collections.sort(regions);
-		
+		extract_domain_contact(input_data_file, regions, output_folder, chr);		
+	}
+	
+	/**
+	 * 
+	 * extract and print the intra-chromosomal contact matrix of each domain
+	 * 
+	 * @param input_data_file
+	 * @param input_domain_file
+	 * @param g: gap between 2 domains of the 2 ends. e.g: 0 means a single domain, 1 means 2 consecutive domains
+	 * @return
+	 * @throws Exception
+	 */
+	public static void extract_domain_contact(String input_data_file, List<RegionVO> regions, String output_folder, int chr, int...g) throws Exception{
+				
 		//output files for contact domain of each region
 		PrintWriter[] pws = new PrintWriter[regions.get(regions.size() - 1).getId() + 1];
 		File tmp_folder = new File(output_folder);
@@ -673,7 +844,8 @@ public class HierarchicalModeling {
 			//}
 		}
 		//
-		
+		int gap = 0;
+		if (g.length > 0) gap = g[0];
 		
 		BufferedReader br = new BufferedReader(new FileReader(new File(input_data_file)));
 		String ln;
@@ -681,13 +853,15 @@ public class HierarchicalModeling {
 		RegionVO tmp = new RegionVO(1,0,0), domain1, domain2;
 		
 		int x, y, i;
+		//HashSet<Integer> set = new HashSet<Integer>();
 		while((ln = br.readLine()) != null) {
+			if (!Character.isDigit(ln.charAt(0))) continue;
 			st = ln.split("\\s+");
 			x = Integer.parseInt(st[0]);
 			y = Integer.parseInt(st[1]);
 			
 			
-			tmp.setChr_id(chr_id);
+			tmp.setChr_id(chr);
 			
 			//look for domain that contains first index
 			tmp.setStart(x);
@@ -700,12 +874,30 @@ public class HierarchicalModeling {
 			domain2 = lookup_region(regions, tmp);
 			
 			//a contact is in a domain (not across domains)
-			if (domain1.getId() == domain2.getId()){
-				pws[domain1.getId()].println(ln);
+			//if (domain1 != null) set.add(x);
+			
+			//if (domain2 != null) set.add(y);
+			
+			//if (domain1 == null || domain2 == null) continue;
+						
+			if (Math.abs(domain1.getId() - domain2.getId()) <= gap){
+				
+				if (domain1.getId() != domain2.getId()){					
+					pws[Math.min(domain1.getId(), domain2.getId())].println(ln);
+				}else{
+					
+					if (domain1.getId() >= gap){
+						for(int k = 0; k <= gap; k++){
+							pws[domain1.getId() - k].println(ln);
+						}
+					}				
+				}
 			}			
 			
 		}
-		//pw.close();
+		
+		//System.out.println(set.size());
+		
 		br.close();
 		
 		for(i = 0; i < regions.size(); i++){
@@ -713,7 +905,6 @@ public class HierarchicalModeling {
 		}		
 		
 	}
-	
 	
 	
 	public static void extract_contact_data(String input_file, String output_file, int start, int end) throws Exception{
@@ -725,6 +916,7 @@ public class HierarchicalModeling {
 		int x, y;
 		long count = 0;
 		while((ln = br.readLine()) != null){
+			if (!Character.isDigit(ln.charAt(0))) continue;
 			st = ln.split("\\s+");
 			x = Integer.parseInt(st[0]);
 			y = Integer.parseInt(st[1]);			

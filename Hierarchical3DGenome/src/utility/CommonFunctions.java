@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.List;
 
+import valueObject.RegionVO;
+
 public class CommonFunctions {
 
 	
@@ -13,9 +15,14 @@ public class CommonFunctions {
 		file.mkdirs();
 	}
 	
+	public static boolean isExist(String fileName){
+		File f = new File(fileName);
+		return f.exists();
+	}
+	
 	public static void delete_file(String file_name) throws Exception{
 		File file = new File(file_name);
-		if (file.isFile()) file.delete();
+		if (file.exists() && file.isFile()) file.delete();
 		else if(file.isDirectory()){
 			for(File f : file.listFiles()){
 				delete_file(f.getAbsolutePath());
@@ -31,6 +38,8 @@ public class CommonFunctions {
 	 */
 	public static String find_mapping_file(String folder_name){
 		File folder = new File(folder_name);
+		if (!folder.exists()) return null;
+		
 		for(File f : folder.listFiles()){
 			if (f.getName().contains("coordinate_mapping")){
 				return f.getAbsolutePath();
@@ -46,6 +55,8 @@ public class CommonFunctions {
 	 */
 	public static String find_pdb_file(String folder_name){
 		File folder = new File(folder_name);
+		if (!folder.exists()) return null;
+		
 		for(File f : folder.listFiles()){
 			if (f.getName().endsWith(".pdb")){
 				return f.getAbsolutePath();
@@ -80,7 +91,7 @@ public class CommonFunctions {
 		BufferedReader br = new BufferedReader(new FileReader(new File(file_name)));
 		String ln, st[];
 		while((ln = br.readLine()) != null){
-			if (ln.length() > 0){
+			if (ln.length() > 0 && ln.startsWith("Best convert factor:")){
 				st = ln.split("[:,]");
 				br.close();
 				return Double.parseDouble(st[1]);
@@ -88,7 +99,7 @@ public class CommonFunctions {
 		}
 		
 		br.close();		
-		return 1.0;
+		return Double.NaN;
 	}
 	
 	/**

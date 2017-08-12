@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import utility.Constants;
-import utility.RegionVO;
+import full_modeling.HierarchicalModeling;
 import valueObject.Constraint;
+import valueObject.RegionVO;
 
 
 /**
@@ -25,7 +25,7 @@ import valueObject.Constraint;
 public class IdentifyDomains {
 	
 	String input_file;
-	int resolution = Constants.RESOLUTION;
+	int resolution = HierarchicalModeling.resolution;
 	int largest_sequence_id;
 	int chrom;
 	private List<RegionVO> domains = null;
@@ -98,45 +98,33 @@ public class IdentifyDomains {
 		
 		rs = merge_domains(rs);
 			
-		//long size2 = get_size(rs);
-		
-//		if (size1 != size2){
-//			System.err.println("error in merging domain");
-//		}
-//		
-//		for(int i = 0; i < rs.size(); i++){
-//			for(int j = i + 1; j < rs.size(); j++){
-//				if (overlap(rs.get(i), rs.get(j)) > 0){
-//					System.err.println("error in merging domain, they are still overlap");
-//				}
-//			}
-//		}		
-		
 		List<RegionVO> regions =  add_non_domains(rs);
 		
 		regions = merge_short_domains(regions);
-		
-		//long size3 = get_size(regions);		
-		//System.out.println("Coverage of the whole chromosome: " + size3);
-		
-		
-//		//debug
-//		HashMap<Integer, String> regSet = new HashMap<Integer, String>();
-//		for(RegionVO reg : regions){
-//			if (!regSet.containsKey(reg.getId())){				
-//				regSet.put(reg.getId(), reg.getStart() + "-" + reg.getEnd());
-//			}else{
-//				System.out.println("Regions with same ID:" + reg.getId() + "\t" + regSet.get(reg.getId()) + "\t" + reg.getStart() + "-" + reg.getEnd());
-//			}
-//		}
-//		//
-		
+	
 		Collections.sort(regions);
 		
 		for(int i = 0; i < regions.size(); i++) regions.get(i).setId(i);
 		
 		return regions;
 	}
+	
+	/**
+	 * Make 2 regions as one to test
+	 * @param regions
+	 * @return
+	 */
+	
+//	public List<RegionVO> merge2ConsecutiveRegions(List<RegionVO> regions){
+//		List<RegionVO> lst = new ArrayList<RegionVO>();
+//		for(int i = 0; i < regions.size() - 1; i++){
+//			RegionVO reg1 = regions.get(i);
+//			RegionVO reg2 = regions.get(i + 1);
+//			RegionVO reg = new RegionVO(i, reg1.getChr_id(), reg1.getStart(), reg2.getEnd());
+//			lst.add(reg);
+//		}
+//		return lst;
+//	}
 	
 	/**
 	 * Length of chromosomes in the input data
@@ -162,9 +150,12 @@ public class IdentifyDomains {
 			
 			x = Integer.parseInt(st[1]);
 			y = Integer.parseInt(st[2]);
-			reg = new RegionVO(chr_id, x, y);
-			reg.setDomain(true);
-			result.add(reg);
+			
+			if (Math.abs(y - x)/resolution < 500){ //do not consider mega domains
+				reg = new RegionVO(chr_id, x, y);
+				reg.setDomain(true);
+				result.add(reg);
+			}
 		}
 		
 		br.close();	
@@ -214,6 +205,9 @@ public class IdentifyDomains {
 	 */
 	public List<RegionVO> merge_short_domains(List<RegionVO> rs){
 		Collections.sort(rs);
+		
+		int maxSizeToMerge = 20;
+		
 		int i = 0, j = 1;
 		RegionVO r1, r2, new_region;
 		
@@ -224,7 +218,7 @@ public class IdentifyDomains {
 			r1 = merged_list.get(merged_list.size() - 1);
 			r2 = rs.get(j);
 			
-			if ( ((r1.getEnd() - r1.getStart())/resolution < 300 && (r2.getEnd() - r2.getStart()) / resolution < 20 ) || (r1.getEnd() - r1.getStart())/resolution < 20){
+			if ( ((r1.getEnd() - r1.getStart())/resolution < 100 && (r2.getEnd() - r2.getStart()) / resolution < maxSizeToMerge) || (r1.getEnd() - r1.getStart())/resolution < maxSizeToMerge){
 				
 				new_region = new RegionVO(r1.getChr_id(), Math.min(r1.getStart(), r2.getStart()), Math.max(r1.getEnd(), r2.getEnd()));
 				new_region.setDomain(r1.isDomain() || r2.isDomain());
@@ -319,5 +313,28 @@ public class IdentifyDomains {
 		}
 		return rs;
 	}
+	
+	/**
+	 * 
+	 * @param regions
+	 * @return
+	 */
+	public List<RegionVO> merge2AdjacentDomains(List<RegionVO> regions){
+		List<RegionVO> rs = new ArrayList<RegionVO>();
+		for(int i = 0; i < regions.size() - 1; i++){
+			RegionVO reg1 = regions.get(i);			
+			RegionVO reg2 = regions.get(i + 1);
+			
+			if (reg1.getChr_id() == reg2.getChr_id()){
+				rs.add(new RegionVO(reg1.getId(), reg1.getChr_id(), reg1.getStart(), reg2.getEnd()));
+			}else{
+				rs.add(reg1);
+				rs.add(reg2);
+			}
+		}
+		return rs;
+	}
+	
+	
 	
 }
