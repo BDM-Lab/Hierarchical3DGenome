@@ -1,0 +1,10 @@
+convert_factor:0.9	cor:-0.9335870172900839
+convert_factor:0.8	cor:-0.9096352797749593
+convert_factor:0.5	cor:-0.7275668360405405
+convert_factor:0.9	cor:-0.9321591418543841
+convert_factor:0.9	cor:-0.9447859963485032
+convert_factor:1.1	cor:-0.8417288403561963
+convert_factor:0.8	cor:-0.9702164352291942
+convert_factor:0.8	cor:-0.954444021308515
+convert_factor:0.9	cor:-0.8896435988009259
+convert_factor:1.0	cor:-0.8899268707068363

@@ -1,0 +1,65 @@
+3D CHROMOSOME/GENOME MODELING BY LORDG
+ATOM      1   CA MET A1          0.655  -0.057  -0.168  0.20 10.00
+ATOM      2   CA MET A2          0.586  -0.041  -0.193  0.20 10.00
+ATOM      3   CA MET A3          0.526  -0.013  -0.248  0.20 10.00
+ATOM      4   CA MET A4          0.420   0.005  -0.284  0.20 10.00
+ATOM      5   CA MET A5          0.297   0.004  -0.310  0.20 10.00
+ATOM      6   CA MET A6          0.173  -0.008  -0.305  0.20 10.00
+ATOM      7   CA MET A7          0.039  -0.021  -0.270  0.20 10.00
+ATOM      8   CA MET A8         -0.076  -0.037  -0.219  0.20 10.00
+ATOM      9   CA MET A9         -0.167  -0.057  -0.122  0.20 10.00
+ATOM     10   CA MET A10        -0.207  -0.077  -0.029  0.20 10.00
+ATOM     11   CA MET A11        -0.216  -0.084   0.101  0.20 10.00
+ATOM     12   CA MET A12        -0.176  -0.062   0.240  0.20 10.00
+ATOM     13   CA MET A13        -0.140  -0.021   0.371  0.20 10.00
+ATOM     14   CA MET A14        -0.110   0.046   0.521  0.20 10.00
+ATOM     15   CA MET A15        -0.034   0.145   0.615  0.20 10.00
+ATOM     16   CA MET A16         0.041   0.231   0.640  0.20 10.00
+ATOM     17   CA MET A17         0.115   0.310   0.595  0.20 10.00
+ATOM     18   CA MET A18         0.153   0.386   0.535  0.20 10.00
+ATOM     19   CA MET A19         0.154   0.412   0.440  0.20 10.00
+ATOM     20   CA MET A20         0.120   0.460   0.365  0.20 10.00
+ATOM     21   CA MET A21         0.055   0.490   0.298  0.20 10.00
+ATOM     22   CA MET A22         0.000   0.462   0.243  0.20 10.00
+ATOM     23   CA MET A23        -0.063   0.407   0.192  0.20 10.00
+ATOM     24   CA MET A24        -0.093   0.311   0.146  0.20 10.00
+ATOM     25   CA MET A25        -0.090   0.223   0.096  0.20 10.00
+ATOM     26   CA MET A26        -0.064   0.146   0.050  0.20 10.00
+ATOM     27   CA MET A27         0.011   0.092   0.017  0.20 10.00
+ATOM     28   CA MET A28         0.104   0.072   0.019  0.20 10.00
+ATOM     29   CA MET A29         0.176   0.038   0.028  0.20 10.00
+ATOM     30   CA MET A30         0.233  -0.022  -0.016  0.20 10.00
+ATOM     31   CA MET A31         0.270  -0.079  -0.070  0.20 10.00
+ATOM     32   CA MET A32         0.284  -0.107  -0.117  0.20 10.00
+CONECT    1    2
+CONECT    2    3
+CONECT    3    4
+CONECT    4    5
+CONECT    5    6
+CONECT    6    7
+CONECT    7    8
+CONECT    8    9
+CONECT    9   10
+CONECT   10   11
+CONECT   11   12
+CONECT   12   13
+CONECT   13   14
+CONECT   14   15
+CONECT   15   16
+CONECT   16   17
+CONECT   17   18
+CONECT   18   19
+CONECT   19   20
+CONECT   20   21
+CONECT   21   22
+CONECT   22   23
+CONECT   23   24
+CONECT   24   25
+CONECT   25   26
+CONECT   26   27
+CONECT   27   28
+CONECT   28   29
+CONECT   29   30
+CONECT   30   31
+CONECT   31   32
+END

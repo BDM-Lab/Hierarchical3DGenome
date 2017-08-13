@@ -1,0 +1,5 @@
+Input file: output/chr14_5kb/chr14_5kb_gm12878_list_chunk.txt
+Convert factor: 0.9999999999999999
+Learning rate: 0.1
+RMSE: 71.88209770908716
+Spearman correlation IFs vs. Reconstructed Dist: -0.8905021526105524

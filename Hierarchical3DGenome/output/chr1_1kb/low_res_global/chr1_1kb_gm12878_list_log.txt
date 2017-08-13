@@ -1,0 +1,6 @@
+Input file: output/chr1_1kb//chr1_1kb_gm12878_list_domain_contact.txt
+Convert factor: 0.6
+Learning rate: 1.0
+AVG RMSE: 91.44162448694603
+AVG Spearman correlation IFs vs. Reconstructed Dist: -0.8755871111746557
+AVG Spearman correlation WishDist vs. Reconstructed Dist: 0.0

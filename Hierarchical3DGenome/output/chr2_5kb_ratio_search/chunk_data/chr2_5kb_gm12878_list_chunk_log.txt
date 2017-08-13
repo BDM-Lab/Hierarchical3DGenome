@@ -1,0 +1,6 @@
+Input file: output/chr2_5kb_ratio_search/chr2_5kb_gm12878_list_chunk.txt
+Convert factor: 1.4000000000000001
+Learning rate: 0.1
+AVG RMSE: 20.33527783561021
+AVG Spearman correlation IFs vs. Reconstructed Dist: -0.7322211749669929
+AVG Spearman correlation WishDist vs. Reconstructed Dist: 0.0

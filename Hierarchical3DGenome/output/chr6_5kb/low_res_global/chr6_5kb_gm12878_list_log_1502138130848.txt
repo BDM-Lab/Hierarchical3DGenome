@@ -1,0 +1,5 @@
+Input file: output/chr6_5kb/chr6_5kb_gm12878_list_domain_contact.txt
+Convert factor: 0.4
+Learning rate: 1.0
+RMSE: 129.21559459052122
+Spearman correlation IFs vs. Reconstructed Dist: -0.8852513484459028

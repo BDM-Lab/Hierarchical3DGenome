@@ -1,0 +1,6 @@
+Input file: output/chr11_1kb//domains_input//region_362.txt
+Convert factor: 1.2
+Learning rate: 0.0
+AVG RMSE: 36.78683434017215
+AVG Spearman correlation IFs vs. Reconstructed Dist: -0.6392958804844836
+AVG Spearman correlation WishDist vs. Reconstructed Dist: 0.0

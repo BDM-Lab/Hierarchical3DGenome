@@ -1,0 +1,5 @@
+Input file: E:/GM12878/1mb_resolution_intrachromosomal/chr11/MAPQGE30/chr11_1mb_gm12878_list.txt
+Convert factor: 0.6
+Learning rate: 0.1
+AVG RMSE: 97.37747171337924
+AVG Spearman correlation IFs vs. Reconstructed Dist: -0.9105277785571516

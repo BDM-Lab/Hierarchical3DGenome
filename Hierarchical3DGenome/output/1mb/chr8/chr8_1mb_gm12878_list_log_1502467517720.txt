@@ -1,0 +1,5 @@
+Input file: E:/GM12878/1mb_resolution_intrachromosomal/chr8/MAPQGE30/chr8_1mb_gm12878_list.txt
+Convert factor: 0.6
+Learning rate: 0.1
+RMSE: 120.06413270562625
+Spearman correlation IFs vs. Reconstructed Dist: -0.9440384088394393

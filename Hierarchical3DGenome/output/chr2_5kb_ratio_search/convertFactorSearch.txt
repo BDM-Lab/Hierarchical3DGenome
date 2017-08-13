@@ -1,0 +1,19 @@
+convert_factor:1.1	cor:-0.8889331322659815
+convert_factor:1.1	cor:-0.8134137787066211
+convert_factor:0.8	cor:-0.9605268175159394
+convert_factor:0.8	cor:-0.9642202299457854
+convert_factor:1.0	cor:-0.9072002025058181
+convert_factor:1.0	cor:-0.9326973142916997
+convert_factor:1.1	cor:-0.8183372294496454
+convert_factor:0.9	cor:-0.9364612428280543
+convert_factor:0.7	cor:-0.944900607584966
+convert_factor:1.0	cor:-0.908793005351274
+convert_factor:1.3	cor:-0.9585828281517845
+convert_factor:0.9	cor:-0.892064118968344
+convert_factor:0.9	cor:-0.951579793789808
+convert_factor:0.9	cor:-0.9307614078732657
+convert_factor:1.4	cor:-0.7322211749669929
+
+0.70, 0.80, 0.80, 0.90, 0.90, 0.90, 0.90, 1.00, 1.00, 1.00, 1.10, 1.10, 1.10, 1.30, 1.40, 
+
+Best convert factor:1.0

@@ -1,0 +1,5 @@
+Input file: output/chr7_5kb/domains_input//region_113.txt
+Convert factor: 0.9
+Learning rate: 0.0
+RMSE: 67.24115520209091
+Spearman correlation IFs vs. Reconstructed Dist: -0.5215078477394098

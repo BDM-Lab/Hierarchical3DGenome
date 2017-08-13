@@ -1,0 +1,49 @@
+3D CHROMOSOME/GENOME MODELING BY LORDG
+ATOM      1   CA MET A1          0.135  -0.013   0.627  0.20 10.00
+ATOM      2   CA MET A2          0.153  -0.060   0.541  0.20 10.00
+ATOM      3   CA MET A3          0.171  -0.110   0.435  0.20 10.00
+ATOM      4   CA MET A4          0.195  -0.161   0.323  0.20 10.00
+ATOM      5   CA MET A5          0.217  -0.192   0.244  0.20 10.00
+ATOM      6   CA MET A6          0.230  -0.261   0.151  0.20 10.00
+ATOM      7   CA MET A7          0.223  -0.307   0.069  0.20 10.00
+ATOM      8   CA MET A8          0.140  -0.308  -0.002  0.20 10.00
+ATOM      9   CA MET A9          0.054  -0.297  -0.045  0.20 10.00
+ATOM     10   CA MET A10        -0.046  -0.231  -0.068  0.20 10.00
+ATOM     11   CA MET A11        -0.155  -0.179  -0.134  0.20 10.00
+ATOM     12   CA MET A12        -0.242  -0.134  -0.171  0.20 10.00
+ATOM     13   CA MET A13        -0.305  -0.046  -0.198  0.20 10.00
+ATOM     14   CA MET A14        -0.290   0.055  -0.179  0.20 10.00
+ATOM     15   CA MET A15        -0.281   0.177  -0.164  0.20 10.00
+ATOM     16   CA MET A16        -0.232   0.284  -0.129  0.20 10.00
+ATOM     17   CA MET A17        -0.197   0.416  -0.103  0.20 10.00
+ATOM     18   CA MET A18        -0.116   0.529  -0.061  0.20 10.00
+ATOM     19   CA MET A19        -0.011   0.535  -0.011  0.20 10.00
+ATOM     20   CA MET A20         0.138   0.513   0.064  0.20 10.00
+ATOM     21   CA MET A21         0.283   0.450   0.138  0.20 10.00
+ATOM     22   CA MET A22         0.412   0.404   0.198  0.20 10.00
+ATOM     23   CA MET A23         0.504   0.354   0.240  0.20 10.00
+ATOM     24   CA MET A24         0.576   0.315   0.270  0.20 10.00
+CONECT    1    2
+CONECT    2    3
+CONECT    3    4
+CONECT    4    5
+CONECT    5    6
+CONECT    6    7
+CONECT    7    8
+CONECT    8    9
+CONECT    9   10
+CONECT   10   11
+CONECT   11   12
+CONECT   12   13
+CONECT   13   14
+CONECT   14   15
+CONECT   15   16
+CONECT   16   17
+CONECT   17   18
+CONECT   18   19
+CONECT   19   20
+CONECT   20   21
+CONECT   21   22
+CONECT   22   23
+CONECT   23   24
+END

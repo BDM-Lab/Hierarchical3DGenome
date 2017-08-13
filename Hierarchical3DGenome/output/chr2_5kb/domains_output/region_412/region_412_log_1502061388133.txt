@@ -1,0 +1,5 @@
+Input file: output/chr2_5kb/domains_input//region_412.txt
+Convert factor: 0.9
+Learning rate: 0.0
+RMSE: 54.34714646053883
+Spearman correlation IFs vs. Reconstructed Dist: -0.7359866821021399

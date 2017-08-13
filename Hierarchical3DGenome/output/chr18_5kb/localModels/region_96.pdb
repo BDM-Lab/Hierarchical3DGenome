@@ -1,0 +1,59 @@
+
+ATOM      1   CA MET B1          2.006   3.218  17.300  0.20 10.00
+ATOM      2   CA MET B2          1.928   3.016  17.233  0.20 10.00
+ATOM      3   CA MET B3          1.835   2.751  17.102  0.20 10.00
+ATOM      4   CA MET B4          1.730   2.533  16.958  0.20 10.00
+ATOM      5   CA MET B5          1.726   2.264  16.786  0.20 10.00
+ATOM      6   CA MET B6          1.732   1.929  16.772  0.20 10.00
+ATOM      7   CA MET B7          1.451   1.886  16.613  0.20 10.00
+ATOM      8   CA MET B8          1.269   1.967  16.484  0.20 10.00
+ATOM      9   CA MET B9          1.000   2.040  16.382  0.20 10.00
+ATOM     10   CA MET B10         0.802   2.094  16.561  0.20 10.00
+ATOM     11   CA MET B11         0.596   1.937  16.523  0.20 10.00
+ATOM     12   CA MET B12         0.496   1.832  16.754  0.20 10.00
+ATOM     13   CA MET B13         0.300   1.709  16.896  0.20 10.00
+ATOM     14   CA MET B14         0.070   1.738  16.851  0.20 10.00
+ATOM     15   CA MET B15        -0.075   1.814  17.016  0.20 10.00
+ATOM     16   CA MET B16        -0.088   1.948  17.166  0.20 10.00
+ATOM     17   CA MET B17         0.090   1.993  17.386  0.20 10.00
+ATOM     18   CA MET B18         0.016   2.024  17.644  0.20 10.00
+ATOM     19   CA MET B19         0.077   2.255  17.771  0.20 10.00
+ATOM     20   CA MET B20         0.186   2.297  18.001  0.20 10.00
+ATOM     21   CA MET B21         0.361   2.199  18.207  0.20 10.00
+ATOM     22   CA MET B22         0.562   2.100  18.334  0.20 10.00
+ATOM     23   CA MET B23         0.767   1.995  18.482  0.20 10.00
+ATOM     24   CA MET B24         0.918   1.885  18.698  0.20 10.00
+ATOM     25   CA MET B25         1.038   1.722  18.786  0.20 10.00
+ATOM     26   CA MET B26         1.245   1.781  19.006  0.20 10.00
+ATOM     27   CA MET B27         1.386   1.720  19.275  0.20 10.00
+ATOM     28   CA MET B28         1.482   1.522  19.473  0.20 10.00
+ATOM     29   CA MET B29         1.315   1.261  19.551  0.20 10.00
+CONECT    1    2
+CONECT    2    3
+CONECT    3    4
+CONECT    4    5
+CONECT    5    6
+CONECT    6    7
+CONECT    7    8
+CONECT    8    9
+CONECT    9   10
+CONECT   10   11
+CONECT   11   12
+CONECT   12   13
+CONECT   13   14
+CONECT   14   15
+CONECT   15   16
+CONECT   16   17
+CONECT   17   18
+CONECT   18   19
+CONECT   19   20
+CONECT   20   21
+CONECT   21   22
+CONECT   22   23
+CONECT   23   24
+CONECT   24   25
+CONECT   25   26
+CONECT   26   27
+CONECT   27   28
+CONECT   28   29
+END

@@ -1,0 +1,12 @@
+convert_factor:1.9	cor:-0.6576458793122046
+convert_factor:2.3	cor:-0.5627938756593694
+convert_factor:2.9	cor:-0.6083537948017665
+convert_factor:1.8	cor:-0.6442849449174227
+convert_factor:1.5	cor:-0.6688077620588266
+convert_factor:1.9	cor:-0.6193830475129857
+convert_factor:1.4	cor:-0.5488914786111382
+convert_factor:0.9	cor:-0.6555182283758703
+convert_factor:2.5	cor:-0.5692318094436271
+convert_factor:0.8	cor:-0.5852863290417499
+
+0.80, 0.90, 1.40, 1.50, 1.80, 1.90, 1.90, 2.30, 2.50, 2.90, 

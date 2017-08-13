@@ -1,0 +1,5 @@
+Input file: E:/GM12878/1mb_resolution_intrachromosomal/chr3/MAPQGE30/chr3_1mb_gm12878_list.txt
+Convert factor: 0.6
+Learning rate: 0.1
+RMSE: 99.08307469511318
+Spearman correlation IFs vs. Reconstructed Dist: -0.917318492399464

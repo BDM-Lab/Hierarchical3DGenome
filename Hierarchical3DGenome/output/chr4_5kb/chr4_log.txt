@@ -1,0 +1,6 @@
+Input file: output/chr4_5kb/chr4_5kb_gm12878_list_filtered.txt
+Convert factor: 1.0
+Learning rate: 0.1
+AVG RMSE: 59.771607497482414
+AVG Spearman correlation IFs vs. Reconstructed Dist: -0.7607321747047011
+AVG Spearman correlation WishDist vs. Reconstructed Dist: 0.0

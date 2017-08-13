@@ -1,0 +1,7 @@
+3D CHROMOSOME/GENOME MODELING BY LORDG
+ATOM      1   CA MET A1          0.020   0.005  -0.009  0.20 10.00
+ATOM      2   CA MET A2         -0.024  -0.003   0.024  0.20 10.00
+ATOM      3   CA MET A3          0.017   0.014  -0.002  0.20 10.00
+CONECT    1    2
+CONECT    2    3
+END

@@ -1,0 +1,2 @@
+Scale for global model:1.9237223447059444
+Skip:17408	87585000

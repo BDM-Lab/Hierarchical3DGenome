@@ -1,0 +1,41 @@
+3D CHROMOSOME/GENOME MODELING BY LORDG
+ATOM      1   CA MET A1         -0.025  -0.029   0.233  0.20 10.00
+ATOM      2   CA MET A2         -0.103   0.046   0.173  0.20 10.00
+ATOM      3   CA MET A3         -0.159   0.088   0.085  0.20 10.00
+ATOM      4   CA MET A4         -0.145   0.083  -0.044  0.20 10.00
+ATOM      5   CA MET A5         -0.071   0.046  -0.112  0.20 10.00
+ATOM      6   CA MET A6          0.021  -0.011  -0.148  0.20 10.00
+ATOM      7   CA MET A7          0.148  -0.020  -0.172  0.20 10.00
+ATOM      8   CA MET A8          0.246   0.036  -0.107  0.20 10.00
+ATOM      9   CA MET A9          0.325   0.095  -0.019  0.20 10.00
+ATOM     10   CA MET A10         0.331   0.089   0.096  0.20 10.00
+ATOM     11   CA MET A11         0.281   0.046   0.199  0.20 10.00
+ATOM     12   CA MET A12         0.183  -0.030   0.223  0.20 10.00
+ATOM     13   CA MET A13         0.128  -0.106   0.179  0.20 10.00
+ATOM     14   CA MET A14         0.070  -0.139   0.059  0.20 10.00
+ATOM     15   CA MET A15         0.046  -0.104  -0.021  0.20 10.00
+ATOM     16   CA MET A16         0.006   0.007  -0.037  0.20 10.00
+ATOM     17   CA MET A17        -0.020   0.093  -0.035  0.20 10.00
+ATOM     18   CA MET A18        -0.113   0.164   0.008  0.20 10.00
+ATOM     19   CA MET A19        -0.221   0.137   0.046  0.20 10.00
+ATOM     20   CA MET A20        -0.308   0.057   0.063  0.20 10.00
+CONECT    1    2
+CONECT    2    3
+CONECT    3    4
+CONECT    4    5
+CONECT    5    6
+CONECT    6    7
+CONECT    7    8
+CONECT    8    9
+CONECT    9   10
+CONECT   10   11
+CONECT   11   12
+CONECT   12   13
+CONECT   13   14
+CONECT   14   15
+CONECT   15   16
+CONECT   16   17
+CONECT   17   18
+CONECT   18   19
+CONECT   19   20
+END
