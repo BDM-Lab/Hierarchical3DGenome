@@ -38,9 +38,9 @@ To run the tool, type: `java -jar HierarchicalModeller.jar chr_id resolution obs
 - Parameters:
 	+ **chr_id**: eg. 1, 2, ..
 	+ **resolution**: e.g 5000
-	+ **observed_contact_data**: observed hi-C contact file, each line contains 3 numbers (separated by a space) of a contact, position_1 position_2 interaction_frequencies (can be downloaded from https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE63525)	
-	+ **normalized_contact_data**: normalized hi-C contact file, each line contains 3 numbers (separated by a space) of a contact, position_1 position_2 interaction_frequencies (can be downloaded and normalized from https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE63525)
-	+ **domain_file**: file contains domains identified by Juicer (https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE63525)	
+	+ **observed_contact_data**: observed hi-C contact file, each line contains 3 numbers (separated by a space) of a contact, position_1 position_2 interaction_frequencies (input/chr10_5kb.RAWobserved)(can be downloaded from https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE63525)	
+	+ **normalized_contact_data**: normalized hi-C contact file, each line contains 3 numbers (separated by a space) of a contact, position_1 position_2 interaction_frequencies (chr10_5kb_gm12878_list.txt) (can be downloaded and normalized from https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE63525)
+	+ **domain_file**: file contains domains identified by Juicer (input/GSE63525_GM12878_primary+replicate_Arrowhead_domainlist_whole.txt) (https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE63525)	
 	+ **output_folder**: output folder
 
 - Typically, the input is several GBs in size and therefore, the program requires a lot of RAM memory to run. We ran our experiment in a server with 120 GB RAM and 80 cores. 
