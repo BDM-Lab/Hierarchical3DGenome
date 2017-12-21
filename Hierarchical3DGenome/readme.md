@@ -33,6 +33,7 @@
 ## 2. Usage ##
 
 To run the tool, type: `java -jar HierarchicalModeller.jar chr_id resolution observed_contact_data normalized_contact_data domain_file output_folder` 
+
 Example: `java -jar HierarchicalModeller.jar 10 5000 input/chr10_5kb.RAWobserved input/chr10_5kb_gm12878_list.txt input/GSE63525_GM12878_primary+replicate_Arrowhead_domainlist_whole.txt output` 
 
 
