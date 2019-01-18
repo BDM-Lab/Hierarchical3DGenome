@@ -29,7 +29,7 @@
 - src: source code in java
 - input: sample input data
 - output: all HierarchicalModeller experimental output data
-- executable: executable jar file or Download here : https://github.com/BDM-Lab/Hierarchical3DGenome/releases
+- executable: *Download *latest* .jar executable from here* : https://github.com/BDM-Lab/Hierarchical3DGenome/releases
 - miniMDS: output results amd scripts generated for this method
 
 ## 2. Usage ##
