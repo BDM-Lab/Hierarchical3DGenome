@@ -30,7 +30,7 @@
 - input: sample input data
 - output: all HierarchicalModeller experimental output data
 - executable: *Download **latest** .jar executable from here* : https://github.com/BDM-Lab/Hierarchical3DGenome/releases
-- miniMDS: output results amd scripts generated for this method
+- miniMDS: output results and scripts generated for this method
 
 ## 2. Usage ##
 
