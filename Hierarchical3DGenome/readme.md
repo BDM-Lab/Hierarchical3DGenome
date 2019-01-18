@@ -27,8 +27,10 @@
 
 ## 1. Content of folders:
 - src: source code in java
-- output: all experimental data
+- input: sample input data
+- output: all HierarchicalModeller experimental output data
 - executable: executable jar file
+- miniMDS: output results amd scripts generated for this method
 
 ## 2. Usage ##
 
