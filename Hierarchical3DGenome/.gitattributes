@@ -1,9 +1,0 @@
-input/GSE63525_GM12878_primary+replicate_Arrowhead_domainlist_whole.txt filter=lfs diff=lfs merge=lfs -text
-input/chr10_5kb.RAWobserved filter=lfs diff=lfs merge=lfs -text
-input/chr10_5kb_gm12878_list.txt filter=lfs diff=lfs merge=lfs -text
-input/chr14_5kb.RAWobserved filter=lfs diff=lfs merge=lfs -text
-input/chr14_5kb_gm12878_list.txt filter=lfs diff=lfs merge=lfs -text
-input/chr14_5kb_gm12878_list.zip filter=lfs diff=lfs merge=lfs -text
-input/chr10_5kb.zip filter=lfs diff=lfs merge=lfs -text
-input/chr10_5kb_gm12878_list.zip filter=lfs diff=lfs merge=lfs -text
-input/chr14_5kb.zip filter=lfs diff=lfs merge=lfs -text
